@@ -26,19 +26,19 @@ app.config['SECURITY_PASSWORD_SALT'] = os.environ.get("SECURITY_PASSWORD_SALT", 
 user_datastore = SQLAlchemySessionUserDatastore(db_session, User, Role)
 security = Security(app, user_datastore)
 
-# Create a user to test with
-@app.before_first_request
-def create_user():
-    init_db()
-    if not user_datastore.find_user(email="test@me.com"):
-        user_datastore.create_user(email="test@me.com", password=hash_password("password"))
-    db_session.commit()
+## Create a user to test with
+#@app.before_first_request
+#def create_user():
+#    init_db()
+#    if not user_datastore.find_user(email="test@me.com"):
+#        user_datastore.create_user(email="test@me.com", password=hash_password("password"))
+#    db_session.commit()
 
 # Views
 @app.route("/",  methods=['GET', 'POST'])
 def index():
     if current_user.is_authenticated:
-        
+
         greetings = f'Hello {current_user.email} !'
 
     else:
@@ -50,10 +50,10 @@ def index():
 @auth_required()
 def home():
     if current_user.is_authenticated:
-        
+
         greetings = f'Hello {current_user.email} !'
         return render_template("home.html", greetings=greetings)
-    
+
     else:
         return redirect("/", code=302)
 
@@ -62,7 +62,7 @@ def home():
 @auth_required()
 def logout():
     logout_user()
-    
+
     return redirect("/", code=302)
 
 
